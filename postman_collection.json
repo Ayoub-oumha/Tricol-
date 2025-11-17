@@ -1,0 +1,305 @@
+{
+  "info": {
+    "name": "Tricol Supplier Chain API",
+    "description": "Collection of all API endpoints for the Tricol Supplier Chain application",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Bon Sortie",
+      "item": [
+        {
+          "name": "Create Bon Sortie",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroBon\": \"BS001\",\n  \"dateSortie\": \"2024-01-15\",\n  \"motif\": \"PRODUCTION\",\n  \"lignesBonSortie\": [\n    {\n      \"produitId\": 1,\n      \"quantite\": 10.5\n    }\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/bonSorties"
+          }
+        },
+        {
+          "name": "Get All Bon Sorties",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/bonSorties"
+          }
+        },
+        {
+          "name": "Get Bon Sortie by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/bonSorties/1"
+          }
+        },
+        {
+          "name": "Update Bon Sortie",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dateSortie\": \"2024-01-16\",\n  \"motif\": \"MAINTENANCE\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/bonSorties/1"
+          }
+        },
+        {
+          "name": "Delete Bon Sortie",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/bonSorties/1"
+          }
+        },
+        {
+          "name": "Get Bon Sorties by Atelier",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/bonSorties/atelier/PRODUCTION"
+          }
+        },
+        {
+          "name": "Cancel Bon Sortie",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/bonSorties/annulation/1"
+          }
+        },
+        {
+          "name": "Validate Bon Sortie",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/bonSorties/validation/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Commande Fournisseur",
+      "item": [
+        {
+          "name": "Get All Commandes",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/commandes"
+          }
+        },
+        {
+          "name": "Create Commande",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCommande\": \"CMD001\",\n  \"dateCommande\": \"2024-01-15\",\n  \"fournisseurId\": 1,\n  \"lignesCommande\": [\n    {\n      \"produitId\": 1,\n      \"quantite\": 100,\n      \"prixUnitaire\": 25.50\n    }\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/commandes"
+          }
+        },
+        {
+          "name": "Get Commande by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/commandes/1"
+          }
+        },
+        {
+          "name": "Update Commande",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dateCommande\": \"2024-01-16\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/commandes/1"
+          }
+        },
+        {
+          "name": "Delete Commande",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/commandes/1"
+          }
+        },
+        {
+          "name": "Get Commandes by Fournisseur",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/commandes/fournisseur/1"
+          }
+        },
+        {
+          "name": "Receive Commande",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/commandes/1/reception"
+          }
+        },
+        {
+          "name": "Validate Commande",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/v1/commandes/1/valider"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Fournisseur",
+      "item": [
+        {
+          "name": "Create Fournisseur",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Fournisseur ABC\",\n  \"email\": \"contact@abc.com\",\n  \"telephone\": \"+212600000000\",\n  \"adresse\": \"123 Rue Example, Casablanca\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/fournisseurs"
+          }
+        },
+        {
+          "name": "Get All Fournisseurs",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/fournisseurs"
+          }
+        },
+        {
+          "name": "Get Fournisseur by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/fournisseurs/1"
+          }
+        },
+        {
+          "name": "Update Fournisseur",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Fournisseur ABC Updated\",\n  \"email\": \"updated@abc.com\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/fournisseurs/1"
+          }
+        },
+        {
+          "name": "Delete Fournisseur",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/fournisseurs/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Produit",
+      "item": [
+        {
+          "name": "Get All Produits",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/produits"
+          }
+        },
+        {
+          "name": "Create Produit",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Produit Example\",\n  \"description\": \"Description du produit\",\n  \"prix\": 25.99,\n  \"seuilMinimal\": 10,\n  \"unite\": \"PIECE\"\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/produits"
+          }
+        },
+        {
+          "name": "Get Produit by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/produits/1"
+          }
+        },
+        {
+          "name": "Update Produit",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Produit Updated\",\n  \"prix\": 29.99\n}"
+            },
+            "url": "{{baseUrl}}/api/v1/produits/1"
+          }
+        },
+        {
+          "name": "Delete Produit",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/v1/produits/1"
+          }
+        },
+        {
+          "name": "Get Stock by Produit",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/produits/1/stock"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stock",
+      "item": [
+        {
+          "name": "Get Global Stock",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/stock"
+          }
+        },
+        {
+          "name": "Get Stock by Produit",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/stock/produit/1"
+          }
+        },
+        {
+          "name": "Get Stock Movements History",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/stock/mouvements"
+          }
+        },
+        {
+          "name": "Get Movements by Produit",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/stock/mouvements/produit/1"
+          }
+        },
+        {
+          "name": "Get Total Valorisation",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/stock/valorisation"
+          }
+        }
+      ]
+    }
+  ]
+}

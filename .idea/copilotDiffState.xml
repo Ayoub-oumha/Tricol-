@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/src/main/java/org/tricol/supplierchain/dto/request/BonSortieUpdateDTO.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/src/main/java/org/tricol/supplierchain/dto/request/BonSortieUpdateDTO.java" />
+              <option name="originalContent" value="package org.tricol.supplierchain.dto.request;&#10;&#10;import jakarta.validation.Valid;&#10;import jakarta.validation.constraints.FutureOrPresent;&#10;import lombok.Data;&#10;import org.tricol.supplierchain.enums.Atelier;&#10;import org.tricol.supplierchain.enums.MotifBonSortie;&#10;import org.tricol.supplierchain.enums.StatutBonSortie;&#10;&#10;import java.time.LocalDate;&#10;import java.util.List;&#10;&#10;@Data&#10;public class BonSortieUpdateDTO {&#10;&#10;    @FutureOrPresent(message = &quot;La date de livraison prevue doit etre aujourd'hui ou ulterieure&quot;)&#10;    private LocalDate dateSortie;&#10;&#10;    private StatutBonSortie statut;&#10;&#10;    private MotifBonSortie motif;&#10;&#10;    private Atelier atelier;&#10;&#10;    @Valid&#10;    private List&lt;LigneBonSortieRequestDTO&gt; lignesBonSortie;&#10;}&#10;" />
+              <option name="updatedContent" value="package org.tricol.supplierchain.dto.request;&#13;&#10;&#13;&#10;import jakarta.validation.Valid;&#13;&#10;import jakarta.validation.constraints.FutureOrPresent;&#13;&#10;import lombok.Data;&#13;&#10;import org.tricol.supplierchain.enums.Atelier;&#13;&#10;import org.tricol.supplierchain.enums.MotifBonSortie;&#13;&#10;import org.tricol.supplierchain.enums.StatutBonSortie;&#13;&#10;&#13;&#10;import java.time.LocalDate;&#13;&#10;import java.util.List;&#13;&#10;&#13;&#10;@Data&#13;&#10;public class BonSortieUpdateDTO {&#13;&#10;&#13;&#10;    @FutureOrPresent(message = &quot;La date de livraison prevue doit etre aujourd'hui ou ulterieure&quot;)&#13;&#10;    private LocalDate dateSortie;&#13;&#10;&#13;&#10;    private StatutBonSortie statut;&#13;&#10;&#13;&#10;    private MotifBonSortie motif;&#13;&#10;&#13;&#10;    private Atelier atelier;&#13;&#10;&#13;&#10;    @Valid&#13;&#10;    private List&lt;LigneBonSortieRequestDTO&gt; lignesBonSortie;&#13;&#10;}" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

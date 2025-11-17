@@ -1,0 +1,28 @@
+package org.tricol.supplierchain.config;
+
+
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.time.format.DateTimeFormatter;
+
+@Configuration
+public class JacksonConfig {
+
+    private static final String DATETIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    private static final LocalDateTimeSerializer LOCAL_DATETIME_SERIALIZER =
+            new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DATETIME_PATTERN));
+
+
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer jacksonCustomizer() {
+        return builder -> {
+            builder.simpleDateFormat(DATETIME_PATTERN);
+            builder.serializers(LOCAL_DATETIME_SERIALIZER);
+            builder.featuresToDisable(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        };
+    }
+
+}
