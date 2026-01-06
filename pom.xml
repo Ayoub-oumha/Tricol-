@@ -119,3 +119,4 @@
         </plugins>
     </build>
 </project>// Security: Update Maven dependencies for security
+// Security: Implement password encryption
