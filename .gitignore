@@ -1,1 +1,2 @@
 // Security: Add input validation and sanitization
+// Security: Implement API rate limiting
