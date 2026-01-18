@@ -1,0 +1,5 @@
+org\tricol\supplierchain\service\BonSortieServiceTest.class
+org\tricol\supplierchain\service\CommandeFournisseurServiceTest.class
+org\tricol\supplierchain\Brief6TricolSupplierChainApplicationTests.class
+org\tricol\supplierchain\service\AuthServiceImplTest.class
+org\tricol\supplierchain\service\GestionStockImplTest.class
