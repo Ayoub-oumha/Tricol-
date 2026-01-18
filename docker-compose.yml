@@ -1,0 +1,155 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: tricol-postgres
+    environment:
+      POSTGRES_DB: tricol_enterprise
+      POSTGRES_USER: tricol_admin
+      POSTGRES_PASSWORD: tricol_secure_2024
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - tricol-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tricol_admin -d tricol_enterprise"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Redis Cache (Optional)
+  redis:
+    image: redis:7-alpine
+    container_name: tricol-redis
+    command: redis-server --appendonly yes --requirepass tricol_redis_2024
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - tricol-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Tricol Application
+  tricol-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tricol-enterprise
+    environment:
+      # Database Configuration
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/tricol_enterprise
+      SPRING_DATASOURCE_USERNAME: tricol_admin
+      SPRING_DATASOURCE_PASSWORD: tricol_secure_2024
+      
+      # Redis Configuration
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      SPRING_REDIS_PASSWORD: tricol_redis_2024
+      
+      # Application Configuration
+      SPRING_PROFILES_ACTIVE: docker
+      SERVER_PORT: 8080
+      
+      # JWT Configuration
+      JWT_SECRET: tricol_jwt_secret_key_2024_enterprise_grade_security
+      JWT_EXPIRATION: 86400000
+      
+      # Logging Configuration
+      LOGGING_LEVEL_ORG_TRICOL: INFO
+      LOGGING_LEVEL_ROOT: WARN
+      
+      # JVM Options
+      JAVA_OPTS: -Xmx1024m -Xms512m -XX:+UseG1GC -XX:+UseContainerSupport
+    ports:
+      - "8080:8080"
+    networks:
+      - tricol-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      - app_logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # Nginx Reverse Proxy (Production)
+  nginx:
+    image: nginx:alpine
+    container_name: tricol-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/ssl:/etc/nginx/ssl:ro
+    networks:
+      - tricol-network
+    depends_on:
+      - tricol-app
+    restart: unless-stopped
+
+  # Prometheus Monitoring (Optional)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: tricol-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - tricol-network
+    restart: unless-stopped
+
+  # Grafana Dashboard (Optional)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: tricol-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: tricol_grafana_2024
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - tricol-network
+    restart: unless-stopped
+
+# Networks
+networks:
+  tricol-network:
+    driver: bridge
+    name: tricol-enterprise-network
+
+# Volumes
+volumes:
+  postgres_data:
+    name: tricol-postgres-data
+  redis_data:
+    name: tricol-redis-data
+  app_logs:
+    name: tricol-app-logs
+  prometheus_data:
+    name: tricol-prometheus-data
+  grafana_data:
+    name: tricol-grafana-data
