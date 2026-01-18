@@ -1,15 +1,13 @@
 package org.tricol.supplierchain.service.inter;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.tricol.supplierchain.dto.request.AuditLogSearchCriteria;
+import org.tricol.supplierchain.entity.AuditLog;
+
+
 
 public interface AuditService {
-
-    void log(String action, String resource, String resourceId, String details);
-
-    void logWithUser(Long userId, String username, String action, String resource, String resourceId, String details);
-
-    void logAuthentication(String username, String action, boolean success);
-
-    void logPermissionChange(Long userId, String username, String permissionName, boolean granted, Long grantedBy);
-
+    void logAudit(Long userId, String username, String action, String resource, String details, String ipAddress);
+    Page<AuditLog> searchAuditLogs(AuditLogSearchCriteria criteria, Pageable pageable);
 }
-

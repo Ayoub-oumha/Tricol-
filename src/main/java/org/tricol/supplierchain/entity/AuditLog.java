@@ -6,7 +6,12 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "audit_logs")
+@Table(name = "audit_logs", indexes = {
+        @Index(name = "idx_user_id", columnList = "user_id"),
+        @Index(name = "idx_action_timestamp", columnList = "action_timestamp"),
+        @Index(name = "idx_resource", columnList = "resource"),
+        @Index(name = "idx_created_at", columnList = "created_at")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,26 +26,32 @@ public class AuditLog {
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "username")
+    @Column(length = 50)
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String action;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String resource;
-
-    @Column(name = "resource_id")
-    private String resourceId;
 
     @Column(columnDefinition = "TEXT")
     private String details;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "ip_address", length = 45)
+    private String ipAddress;
+
+    @Column(name = "action_timestamp", nullable = false)
+    private LocalDateTime actionTimestamp;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+        if (actionTimestamp == null) {
+            actionTimestamp = LocalDateTime.now();
+        }
     }
 }

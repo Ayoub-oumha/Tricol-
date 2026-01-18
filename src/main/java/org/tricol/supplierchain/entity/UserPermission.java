@@ -29,19 +29,16 @@ public class UserPermission {
     private Permission permission;
 
     @Column(nullable = false)
-    private boolean active = true;
+    private Boolean granted;
 
-    @Column(name = "granted_by")
-    private Long grantedBy;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
-    @Column(name = "granted_at", nullable = false)
-    private LocalDateTime grantedAt;
-
-    @Column(name = "revoked_at")
-    private LocalDateTime revokedAt;
+    @Column(name = "modified_by", length = 50)
+    private String modifiedBy;
 
     @PrePersist
     protected void onCreate() {
-        grantedAt = LocalDateTime.now();
+        createdAt = LocalDateTime.now();
     }
 }

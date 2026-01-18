@@ -9,6 +9,7 @@ import org.tricol.supplierchain.dto.request.CommandeFournisseurCreateDTO;
 import org.tricol.supplierchain.dto.request.CommandeFournisseurUpdateDTO;
 import org.tricol.supplierchain.dto.request.LigneCommandeCreateDTO;
 import org.tricol.supplierchain.dto.response.CommandeFournisseurResponseDTO;
+import org.tricol.supplierchain.dto.response.LotStockResponseDTO;
 import org.tricol.supplierchain.entity.*;
 import org.tricol.supplierchain.enums.StatutCommande;
 import org.tricol.supplierchain.enums.StatutLot;
@@ -18,12 +19,15 @@ import org.tricol.supplierchain.exception.OperationNotAllowedException;
 import org.tricol.supplierchain.exception.ResourceNotFoundException;
 import org.tricol.supplierchain.mapper.CommandeFournisseurMapper;
 import org.tricol.supplierchain.mapper.LigneCommandeMapper;
+import org.tricol.supplierchain.mapper.LotStockMapper;
 import org.tricol.supplierchain.repository.*;
 import org.tricol.supplierchain.service.inter.CommandeFournisseurService;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -243,6 +247,10 @@ public class CommandeFournisseurServiceimpl implements CommandeFournisseurServic
         commandeFournisseurRepository.save(commande);
         return commandeFournisseurMapper.toResponseDto(commande);
     }
+
+
+
+
 
 
 }

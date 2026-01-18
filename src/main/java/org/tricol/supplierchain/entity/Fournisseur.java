@@ -1,13 +1,19 @@
 package org.tricol.supplierchain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
 @Entity
 @Table(name = "fournisseurs")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Fournisseur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

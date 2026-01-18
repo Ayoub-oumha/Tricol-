@@ -1,5 +1,6 @@
 package org.tricol.supplierchain.dto.response;
 
+import lombok.Builder;
 import lombok.Data;
 import org.tricol.supplierchain.enums.Atelier;
 import org.tricol.supplierchain.enums.MotifBonSortie;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@Builder
 public class BonSortieResponseDTO {
 
     private Long id;

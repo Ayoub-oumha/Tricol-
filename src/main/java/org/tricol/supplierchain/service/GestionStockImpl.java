@@ -2,9 +2,6 @@ package org.tricol.supplierchain.service;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tricol.supplierchain.dto.request.CommandeFournisseurCreateDTO;
@@ -20,7 +17,6 @@ import org.tricol.supplierchain.mapper.StockMapper;
 import org.tricol.supplierchain.repository.*;
 import org.tricol.supplierchain.service.inter.CommandeFournisseurService;
 import org.tricol.supplierchain.service.inter.GestionStockService;
-import org.tricol.supplierchain.specification.MouvementStockSpecification;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -29,6 +25,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Data
@@ -106,44 +103,6 @@ public class GestionStockImpl implements GestionStockService {
     @Override
     public BigDecimal getValorisationTotale() {
         return calculerValorisationTotal();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<MouvementStockResponseDTO> searchMouvements(
-            Long produitId,
-            String reference,
-            TypeMouvement type,
-            String numeroLot,
-            java.time.LocalDateTime dateDebut,
-            java.time.LocalDateTime dateFin,
-            Pageable pageable) {
-
-        Specification<MouvementStock> specification = null;
-
-        if (produitId != null) {
-            specification = specification == null ? MouvementStockSpecification.hasProduitId(produitId)
-                    : specification.and(MouvementStockSpecification.hasProduitId(produitId));
-        }
-        if (reference != null && !reference.isEmpty()) {
-            specification = specification == null ? MouvementStockSpecification.hasProduitReference(reference)
-                    : specification.and(MouvementStockSpecification.hasProduitReference(reference));
-        }
-        if (type != null) {
-            specification = specification == null ? MouvementStockSpecification.hasTypeMouvement(type)
-                    : specification.and(MouvementStockSpecification.hasTypeMouvement(type));
-        }
-        if (numeroLot != null && !numeroLot.isEmpty()) {
-            specification = specification == null ? MouvementStockSpecification.hasNumeroLot(numeroLot)
-                    : specification.and(MouvementStockSpecification.hasNumeroLot(numeroLot));
-        }
-        if (dateDebut != null || dateFin != null) {
-            specification = specification == null ? MouvementStockSpecification.hasDateBetween(dateDebut, dateFin)
-                    : specification.and(MouvementStockSpecification.hasDateBetween(dateDebut, dateFin));
-        }
-
-        return mouvementStockRepository.findAll(specification, pageable)
-                .map(mouvementStockMapper::toResponseDTO);
     }
 
     @Override
@@ -242,9 +201,9 @@ public class GestionStockImpl implements GestionStockService {
                 .stream()
                 .map(lot -> lot.getQuantiteRestante().multiply(lot.getPrixUnitaireAchat()))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        produitResponse.setValorisationTotale(valorisation);
-        produitResponse.setAlerteSeuil(isEnAlerte(produit));
-        produitResponse.setStockTotal(getQuantiteDisponible(produit.getId()));
+                produitResponse.setValorisationTotale(valorisation);
+                produitResponse.setAlerteSeuil(isEnAlerte(produit));
+                produitResponse.setStockTotal(getQuantiteDisponible(produit.getId()));
 
 
         return produitResponse;

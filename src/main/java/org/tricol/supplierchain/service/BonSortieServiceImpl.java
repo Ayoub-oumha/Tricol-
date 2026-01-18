@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 @Service
@@ -192,14 +193,6 @@ public class BonSortieServiceImpl implements BonSortieService {
 
             BigDecimal montantLigne = BigDecimal.ZERO;
 
-            BigDecimal totalDisponible = lotStocks.stream()
-                    .map(LotStock::getQuantiteRestante)
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-            if (ligne.getQuantite().compareTo(totalDisponible) > 0) {
-                throw new BusinessException("Stock insuffisant pour le produit : " + ligne.getProduit().getNom());
-            }
-
             for(LotStock lotStock : lotStocks) {
 
                 if (quantiteRestante.compareTo(BigDecimal.ZERO) <= 0) {
@@ -251,4 +244,8 @@ public class BonSortieServiceImpl implements BonSortieService {
         bonSortieRepository.save(bonSortie);
         return  bonSortieMapper.toResponseDTO(bonSortie);
     }
+
+
+
+
 }

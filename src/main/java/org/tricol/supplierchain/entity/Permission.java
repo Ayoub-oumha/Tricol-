@@ -2,8 +2,6 @@ package org.tricol.supplierchain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.tricol.supplierchain.enums.PermissionName;
 
 @Entity
 @Table(name = "permissions")
@@ -12,26 +10,21 @@ import org.tricol.supplierchain.enums.PermissionName;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Permission implements GrantedAuthority {
+public class Permission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, unique = true)
-    private PermissionName name;
+    @Column(nullable = false, unique = true, length = 100)
+    private String name;
 
+    @Column(length = 255)
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String resource;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String action;
-
-    @Override
-    public String getAuthority() {
-        return name.name();
-    }
 }

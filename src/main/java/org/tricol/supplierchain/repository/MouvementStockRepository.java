@@ -11,7 +11,8 @@ import org.tricol.supplierchain.enums.TypeMouvement;
 import java.util.List;
 
 @Repository
-public interface MouvementStockRepository extends JpaRepository<MouvementStock, Long>, JpaSpecificationExecutor<MouvementStock>{
+public interface MouvementStockRepository extends JpaRepository<MouvementStock, Long>, 
+                                                 JpaSpecificationExecutor<MouvementStock> {
 
     List<MouvementStock> findByProduitIdOrderByDateMouvementDesc(Long produitId);
 

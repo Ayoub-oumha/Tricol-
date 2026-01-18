@@ -4,11 +4,7 @@ package org.tricol.supplierchain.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.LockedException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -27,8 +23,6 @@ public class GlobalHandler {
         });
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
-
-
 
     @ExceptionHandler(DuplicateResourceException.class)
     public ResponseEntity<HashMap<String, String>> handleDuplicate(DuplicateResourceException ex) {
@@ -54,6 +48,22 @@ public class GlobalHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
     }
 
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<HashMap<String, String>> handleBadCredentials(BadCredentialsException ex) {
+        HashMap<String, String> errors = new HashMap<>();
+        errors.put("error", ex.getMessage());
+        errors.put("status", "401");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errors);
+    }
+
+    @ExceptionHandler(InsufficientPermissionsException.class)
+    public ResponseEntity<HashMap<String, String>> handleCustomAccessDeniedException(InsufficientPermissionsException ex) {
+        HashMap<String, String> errors = new HashMap<>();
+        errors.put("error", ex.getMessage());
+        errors.put("status", "403");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errors);
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, String>> handleInvalidDate(HttpMessageNotReadableException ex) {
         if (ex.getMessage().contains("DateTimeParseException")) {
@@ -63,46 +73,6 @@ public class GlobalHandler {
             return ResponseEntity.badRequest().body(error);
         }
         return ResponseEntity.badRequest().build();
-    }
-
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<HashMap<String, String>> handleBadCredentials(BadCredentialsException ex) {
-        HashMap<String, String> errors = new HashMap<>();
-        errors.put("error", "Invalid username or password!");
-        errors.put("status", "401");
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errors);
-    }
-
-    @ExceptionHandler(DisabledException.class)
-    public ResponseEntity<HashMap<String, String>> handleDisabled(DisabledException ex) {
-        HashMap<String, String> errors = new HashMap<>();
-        errors.put("error", "User account is disabled");
-        errors.put("status", "401");
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errors);
-    }
-
-    @ExceptionHandler(LockedException.class)
-    public ResponseEntity<HashMap<String, String>> handleLocked(LockedException ex) {
-        HashMap<String, String> errors = new HashMap<>();
-        errors.put("error", "User account is locked");
-        errors.put("status", "401");
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errors);
-    }
-
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<HashMap<String, String>> handleAuthentication(AuthenticationException ex) {
-        HashMap<String, String> errors = new HashMap<>();
-        errors.put("error", "Authentication failed");
-        errors.put("status", "401");
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errors);
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<HashMap<String, String>> handleAccessDenied(AccessDeniedException ex) {
-        HashMap<String, String> errors = new HashMap<>();
-        errors.put("error", "Access Denied - You don't have permission to access this resource");
-        errors.put("status", "403");
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errors);
     }
 
     @ExceptionHandler(Exception.class)
