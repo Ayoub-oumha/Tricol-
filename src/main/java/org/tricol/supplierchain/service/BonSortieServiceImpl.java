@@ -48,7 +48,7 @@ public class BonSortieServiceImpl implements BonSortieService {
         bonSortie.setNumeroBon(UUID.randomUUID().toString());
 
         List<LigneBonSortie> ligneBonSortie = new ArrayList<>();
-        for(LigneBonSortieRequestDTO lineDto : requestDTO.getLignesBonSortie()) {
+        for(LigneBonSortieRequestDTO lineDto : requestDTO.getLigneBonSorties()) {
             Produit produit = produitRepository.findById(lineDto.getProduitId())
                     .orElseThrow(() -> new ResourceNotFoundException("Produit non trouvé avec l'id " + lineDto.getProduitId()));
             LigneBonSortie ligne = LigneBonSortie.builder()
@@ -126,10 +126,10 @@ public class BonSortieServiceImpl implements BonSortieService {
             throw new BusinessException("Seul les bons de sortie en statut BROUILLON peuvent être modifiés.");
         }
         
-        if (requestDTO.getLignesBonSortie() != null && !requestDTO.getLignesBonSortie().isEmpty()) {
+        if (requestDTO.getLigneBonSorties() != null && !requestDTO.getLigneBonSorties().isEmpty()) {
             existingBonSortie.getLigneBonSorties().clear();
 
-            for (LigneBonSortieRequestDTO lineDto : requestDTO.getLignesBonSortie()) {
+            for (LigneBonSortieRequestDTO lineDto : requestDTO.getLigneBonSorties()) {
                 Produit produit = produitRepository.findById(lineDto.getProduitId())
                         .orElseThrow(() -> new ResourceNotFoundException("Produit non trouvé avec l'id " + lineDto.getProduitId()));
                 LigneBonSortie ligne = LigneBonSortie.builder()
@@ -191,6 +191,14 @@ public class BonSortieServiceImpl implements BonSortieService {
             BigDecimal quantiteRestante = ligne.getQuantite();
 
             BigDecimal montantLigne = BigDecimal.ZERO;
+
+            BigDecimal totalDisponible = lotStocks.stream()
+                    .map(LotStock::getQuantiteRestante)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            if (ligne.getQuantite().compareTo(totalDisponible) > 0) {
+                throw new BusinessException("Stock insuffisant pour le produit : " + ligne.getProduit().getNom());
+            }
 
             for(LotStock lotStock : lotStocks) {
 

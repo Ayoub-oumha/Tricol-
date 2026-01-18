@@ -19,11 +19,13 @@ public class BonSortieRequestDTO {
     @FutureOrPresent(message = "La date de livraison prevue doit etre aujourd'hui ou ulterieure")
     private LocalDate dateSortie;
 
+    @NotNull(message = "Le motif est obligatoire")
     private MotifBonSortie motif;
 
+    @NotNull(message = "L'atelier est obligatoire")
     private Atelier atelier;
 
-    @Valid
     @NotEmpty(message = "La liste des lignes de bon de sortie ne peut pas être vide")
-    private List<LigneBonSortieRequestDTO> lignesBonSortie;
+    @Valid
+    private List<LigneBonSortieRequestDTO> ligneBonSorties;
 }

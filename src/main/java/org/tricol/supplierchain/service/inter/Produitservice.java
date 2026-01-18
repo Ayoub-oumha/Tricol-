@@ -1,6 +1,7 @@
 package org.tricol.supplierchain.service.inter;
 
 import org.springframework.stereotype.Service;
+import org.tricol.supplierchain.dto.request.PointCommandeRequest;
 import org.tricol.supplierchain.dto.request.ProduitRequestDTO;
 import org.tricol.supplierchain.dto.request.ProduitUpdatDTO;
 import org.tricol.supplierchain.dto.response.ProduitResponseDTO;
@@ -15,5 +16,7 @@ public interface Produitservice {
     ProduitResponseDTO getProduitById(Long id);
     void deleteProduit(Long id);
     List<ProduitResponseDTO> getAllProduits();
+
+    ProduitResponseDTO updatePointCommande(Long id , PointCommandeRequest request);
     
 }

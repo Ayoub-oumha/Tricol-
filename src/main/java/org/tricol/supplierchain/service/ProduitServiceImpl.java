@@ -2,6 +2,7 @@ package org.tricol.supplierchain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.tricol.supplierchain.dto.request.PointCommandeRequest;
 import org.tricol.supplierchain.dto.request.ProduitRequestDTO;
 import org.tricol.supplierchain.dto.request.ProduitUpdatDTO;
 import org.tricol.supplierchain.dto.response.ProduitResponseDTO;
@@ -81,4 +82,17 @@ public class ProduitServiceImpl implements Produitservice {
                 .toList();
         return produits;
     }
+
+    @Override
+    public ProduitResponseDTO updatePointCommande(Long id, PointCommandeRequest request) {
+        Produit produit = produitRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Produit avec id " + id + " n'existe pas"));
+
+        produit.setPointCommande(request.getPointCommande());
+
+        produitRepository.save(produit);
+
+        return produitMapper.toResponseDTO(produit);
+    }
+
+
 }

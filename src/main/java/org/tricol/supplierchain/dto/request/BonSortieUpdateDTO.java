@@ -23,5 +23,5 @@ public class BonSortieUpdateDTO {
     private Atelier atelier;
 
     @Valid
-    private List<LigneBonSortieRequestDTO> lignesBonSortie;
+    private List<LigneBonSortieRequestDTO> ligneBonSorties;
 }
