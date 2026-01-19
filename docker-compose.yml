@@ -63,7 +63,7 @@ services:
 
   # Spring Boot application service
   app:
-    build: ..
+    build: .
     container_name: tricol-supplier-chain
     restart: unless-stopped
     depends_on:
