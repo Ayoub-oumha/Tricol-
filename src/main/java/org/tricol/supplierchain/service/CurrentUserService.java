@@ -14,6 +14,7 @@ import org.tricol.supplierchain.repository.UserRepository;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -71,14 +72,32 @@ public class CurrentUserService {
     private Role extractRoleFromJwt(Jwt jwt) {
         try {
             Map<String, Object> realmAccess = jwt.getClaim("realm_access");
+            log.debug("realm_access claim: {}", realmAccess);
+
             if (realmAccess != null) {
                 Collection<String> roles = (Collection<String>) realmAccess.get("roles");
+                log.debug("Roles from JWT: {}", roles);
+
                 if (roles != null) {
-                    return roles.stream()
+                    // Keycloak role: ROLE_ADMIN -> Database role: ADMIN
+                    String roleName = roles.stream()
                             .filter(role -> role.startsWith("ROLE_"))
+                            .map(role -> role.substring(5)) // Strip "ROLE_" prefix
                             .findFirst()
-                            .flatMap(roleRepository::findByName)
                             .orElse(null);
+
+                    log.debug("Looking for role in database: {}", roleName);
+
+                    if (roleName != null) {
+                        Optional<Role> foundRole = roleRepository.findByName(roleName);
+                        if (foundRole.isPresent()) {
+                            log.info("Found role in database: {}", foundRole.get().getName());
+                            return foundRole.get();
+                        } else {
+                            log.warn("Role '{}' not found in database. Available roles: {}",
+                                    roleName, roleRepository.findAll().stream().map(Role::getName).toList());
+                        }
+                    }
                 }
             }
         } catch (Exception e) {
